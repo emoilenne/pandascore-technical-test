@@ -1,0 +1,107 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Champions</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <script src="/scripts/Chart.js"></script>
+    <script src="/scripts/search.js"></script>
+    <script type="text/javascript">
+      function search_wrap() {
+        return search(<%- JSON.stringify(champions) %>);
+      }
+    </script>
+    <script src="/scripts/roles_chart.js"></script>
+    <script src="/scripts/popularity_chart.js"></script>
+    <script type="text/javascript">
+
+    var roles_chart = null;
+    var popularity_chart = null;
+
+    function chart(i) {
+      var champion = <%- JSON.stringify(champions) %>[i];
+      modal.style.display = "block";
+      var modal_champion = document.getElementById("modal_champion");
+      modal_champion.innerHTML = "Statistics of " + champion['name'];
+      if (roles_chart) { roles_chart.destroy(); }
+      if (popularity_chart) { popularity_chart.destroy(); }
+
+      var roles_data_champion = <%- JSON.stringify(roles_data) %>[champion['id'].toString()];
+      draw_roles_chart(roles_data_champion, champion['id']);
+      var popularity_data_champion = <%- JSON.stringify(popularity_data) %>[champion['id'].toString()];
+      draw_popularity_chart(popularity_data_champion, champion['id']);
+
+    }
+    </script>
+  </head>
+  <body>
+
+    <h1>Champion filters</h1>
+    <input type="text" class="search_bar" id="searchBar" onkeyup="search_wrap()" placeholder="Search Champions">
+
+    <div class="roles_bar">
+      <h3>Roles:</h3>
+      <div class="roles_checkbox">
+        <input type="checkbox" class="checkbox" id="Assassin" onchange="search_wrap()">
+        <label for="Assassin">Assassin</label>
+      </div>
+      <div class="roles_checkbox">
+        <input type="checkbox" class="checkbox" id="Fighter" onchange="search_wrap()">
+        <label for="Fighter">Fighter</label>
+      </div>
+      <div class="roles_checkbox">
+        <input type="checkbox" class="checkbox" id="Mage" onchange="search_wrap()">
+        <label for="Mage">Mage</label>
+      </div>
+      <div class="roles_checkbox">
+        <input type="checkbox" class="checkbox" id="Support" onchange="search_wrap()">
+        <label for="Support">Support</label>
+      </div>
+      <div class="roles_checkbox">
+        <input type="checkbox" class="checkbox" id="Tank" onchange="search_wrap()">
+        <label for="Tank">Tank</label>
+      </div>
+      <div class="roles_checkbox">
+        <input type="checkbox" class="checkbox" id="Marksman" onchange="search_wrap()">
+        <label for="Marksman">Marksman</label>
+      </div>
+      <br>
+    </div>
+
+
+    <h1>Champion grid</h1>
+
+    <% for (var i = 0; i < champions.length; i++) { %>
+      <% var name = champions[i]['name']; %>
+      <div onclick="chart(<%= i %>)" class="champion">
+        <img src="img/<%= name %>Square.png">
+        <center><%= name %></center>
+      </div>
+    <% } %>
+
+    <div id="stats" class="modal">
+      <div class="modal_content">
+        <span class="close">&times;</span>
+        <h1 style="text-align: center" id="modal_champion"></h1>
+        <h3 style="text-align: center">Roles</h3>
+        <canvas id="roles_chart"></canvas>
+        <h3 style="text-align: center">Popularity History</h3>
+        <canvas id="popularity_chart"></canvas>
+      </div>
+    </div>
+
+
+    <script>
+      var modal = document.getElementById('stats');
+      var span = document.getElementsByClassName("close")[0];
+      span.onclick = function() {
+          modal.style.display = "none";
+      }
+      window.onclick = function(event) {
+          if (event.target == modal) {
+              modal.style.display = "none";
+          }
+      }
+    </script>
+  </body>
+</html>
