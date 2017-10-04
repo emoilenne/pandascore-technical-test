@@ -62,7 +62,7 @@
 
     <% for (var i = 0; i < champions.length; i++) { %>
       <% var name = champions[i]['name']; %>
-      <div onclick="chart(<%= champions[i]['id'] %>, '<%= champions[i]['name'] %>')" class="champion">
+      <div onclick='chart(<%= champions[i]['id'] %>, "<%= champions[i]['name'] %>")' class="champion">
         <img src="img/<%= name %>Square.png">
         <center><%= name %></center>
       </div>
