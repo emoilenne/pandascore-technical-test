@@ -19,7 +19,7 @@ def get_popularity_data(matches, timeperiod):
         if not (date in popularity_dates):
             popularity_dates[date] = { 'total': 0}
 
-        if not (str(match['champion']) in popularity_dates[date]):
+        if not (match['champion'] in popularity_dates[date]):
             popularity_dates[date][match['champion']] = 0
 
         popularity_dates[date][match['champion']] += 1
@@ -29,7 +29,8 @@ def get_popularity_data(matches, timeperiod):
         for champion in popularity_dates[date]:
             if champion != 'total':
                 # round to 2 decimal digits
-                popularity_dates[date][champion] = round(popularity_dates[date][champion] / popularity_dates[date]['total'] * 10000) / 100.
+                popularity_dates[date][champion] = popularity_dates[date][champion] / popularity_dates[date]['total'] * 100.
+                popularity_dates[date][champion] = round(popularity_dates[date][champion] * 100) / 100.
 
         del popularity_dates[date]['total']
 
@@ -39,7 +40,7 @@ def get_popularity_data(matches, timeperiod):
     for champion in all_champions:
         popularity_champions[champion] = []
         for date in range(min_date, max_date + 1):
-            formatted_date = time.strftime('%B %Y', time.localtime(date * timeperiod * 86400))
+            formatted_date = time.strftime('%b %Y', time.localtime(date * timeperiod * 86400))
             if not (date in popularity_dates and champion in popularity_dates[date]):
                 popularity_champions[champion].append({'date': formatted_date, 'popularity': 0})
             else:
@@ -69,19 +70,24 @@ def get_roles_data(matches):
     for champion in roles_data:
         for role in roles_data[champion]:
             if role != 'total':
-                roles_data[champion][role] /= roles_data[champion]['total'] / 100
+                roles_data[champion][role] = roles_data[champion][role] * 100. / roles_data[champion]['total']
         del roles_data[champion]['total']
 
         roles_data_raw[champion] = []
         for role in roles_data[champion]:
             # round to 1 decimal digit
-            roles_data_raw[champion].append({'role': role.title(), 'data': round(roles_data[champion][role] * 10) / 10.})
+            roles_data_raw[champion].append({'role': role.title().replace('_', ' '), 'data': round(roles_data[champion][role] * 10) / 10.})
 
         roles_data_raw[champion].sort(key=lambda a: a['data'], reverse=True)
 
     print("done.")
     return roles_data_raw
 
+def get_champions_data(champions):
+    print("Getting champions data... ", end='')
+    champions.sort(key=lambda a: a['name'])
+    print("done.")
+    return champions
 
 if __name__ == '__main__':
     with open('data.json') as json_data:
@@ -94,3 +100,7 @@ if __name__ == '__main__':
         popularity_data = get_popularity_data(data['matches'], 10)
         with open('public/data/popularity_data.json', 'w+') as popularity_data_file:
             json.dump(popularity_data, popularity_data_file)
+
+        champions_data = get_champions_data(data['champions'])
+        with open('public/data/champions_data.json', 'w+') as champions_data_file:
+            json.dump(champions_data, champions_data_file)
