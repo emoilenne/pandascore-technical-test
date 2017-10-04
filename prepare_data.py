@@ -87,10 +87,10 @@ if __name__ == '__main__':
     with open('data.json') as json_data:
         data = json.load(json_data)
         roles_data = get_roles_data(data['matches'])
-        with open('roles_data.json', 'w+') as roles_data_file:
+        with open('public/data/roles_data.json', 'w+') as roles_data_file:
             json.dump(roles_data, roles_data_file)
 
         # track every 10 days
         popularity_data = get_popularity_data(data['matches'], 10)
-        with open('popularity_data.json', 'w+') as popularity_data_file:
+        with open('public/data/popularity_data.json', 'w+') as popularity_data_file:
             json.dump(popularity_data, popularity_data_file)
