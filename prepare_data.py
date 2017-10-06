@@ -2,7 +2,7 @@ import time
 import json
 
 def get_popularity_data(matches, timeperiod):
-    print("Getting popularity data... ", end='')
+    print "Getting popularity data... "
     popularity_dates = {}
     min_date = None
     max_date = None
@@ -45,12 +45,12 @@ def get_popularity_data(matches, timeperiod):
                 popularity_champions[champion].append({'date': formatted_date, 'popularity': 0})
             else:
                 popularity_champions[champion].append({'date': formatted_date, 'popularity': popularity_dates[date][champion]})
-    print("done.")
+    print "done."
     return popularity_champions
 
 
 def get_roles_data(matches):
-    print("Getting roles data... ", end='')
+    print "Getting roles data... "
     roles_data = {}
     for match_index in range(len(matches)):
         match = matches[match_index]
@@ -80,13 +80,13 @@ def get_roles_data(matches):
 
         roles_data_raw[champion].sort(key=lambda a: a['data'], reverse=True)
 
-    print("done.")
+    print "done."
     return roles_data_raw
 
 def get_champions_data(champions):
-    print("Getting champions data... ", end='')
+    print "Getting champions data... "
     champions.sort(key=lambda a: a['name'])
-    print("done.")
+    print "done."
     return champions
 
 if __name__ == '__main__':

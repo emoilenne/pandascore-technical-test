@@ -4,7 +4,7 @@
   "description": "Display charts",
   "main": "server.js",
   "scripts": {
-    "start": "python3 prepare_data.py && node server.js"
+    "start": "python prepare_data.py && node server.js"
   },
   "author": "Oleksandra Fedorova",
   "license": "ISC",
