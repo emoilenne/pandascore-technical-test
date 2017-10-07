@@ -29,7 +29,7 @@ def get_popularity_data(matches, timeperiod):
         for champion in popularity_dates[date]:
             if champion != 'total':
                 # round to 2 decimal digits
-                popularity_dates[date][champion] = popularity_dates[date][champion] / popularity_dates[date]['total'] * 100.
+                popularity_dates[date][champion] = popularity_dates[date][champion] * 100. / popularity_dates[date]['total']
                 popularity_dates[date][champion] = round(popularity_dates[date][champion] * 100) / 100.
 
         del popularity_dates[date]['total']
